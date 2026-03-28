@@ -1,4 +1,7 @@
-add_library(pdfmaker)
+add_library(pdfmaker
+    detail/hpdf_guard.cpp
+    error.cpp
+)
 
 target_include_directories(pdfmaker
     PUBLIC
