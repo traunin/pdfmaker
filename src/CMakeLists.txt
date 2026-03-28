@@ -1,0 +1,20 @@
+add_library(pdfmaker)
+
+target_include_directories(pdfmaker
+    PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+# add libharu include dirs
+if(TARGET hpdf)
+    target_link_libraries(pdfmaker PUBLIC hpdf)
+    target_include_directories(pdfmaker PUBLIC
+        $<BUILD_INTERFACE:${libharu_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${libharu_BINARY_DIR}/include>
+    )
+elseif(TARGET haru)
+    target_link_libraries(pdfmaker PUBLIC haru)
+endif()
+
+target_compile_features(pdfmaker PUBLIC cxx_std_17)
