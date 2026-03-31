@@ -4,6 +4,7 @@ add_library(pdfmaker
     color.cpp
     font.cpp
     style.cpp
+    page.cpp
 )
 
 target_include_directories(pdfmaker
