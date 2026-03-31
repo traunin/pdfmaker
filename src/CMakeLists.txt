@@ -3,6 +3,7 @@ add_library(pdfmaker
     error.cpp
     color.cpp
     font.cpp
+    style.cpp
 )
 
 target_include_directories(pdfmaker
