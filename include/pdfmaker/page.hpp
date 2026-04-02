@@ -5,7 +5,7 @@
 #include "pdfmaker/style.hpp"
 
 #include <hpdf.h>
-#include <string_view>
+#include <string>
 
 namespace pdfmaker {
 
@@ -13,8 +13,12 @@ class TextScope {
 public:
     explicit TextScope(HPDF_Page page);
     ~TextScope();
+
     TextScope(const TextScope&) = delete;
     TextScope& operator=(const TextScope&) = delete;
+
+    TextScope(TextScope&&) noexcept;
+    TextScope& operator=(TextScope&&) = delete;
 
 private:
     HPDF_Page page_;
@@ -33,9 +37,9 @@ public:
 
     [[nodiscard]] TextScope begin_text();
     void set_font(Font font, float size);
-    void text_out(float x, float y, std::string_view text);
+    void text_out(float x, float y, const std::string& text);
     void move_text_pos(float x, float y);
-    void show_text(std::string_view text);
+    void show_text(const std::string& text);
 
     void set_line_width(float width);
     void set_stroke_color(Color c);

@@ -5,7 +5,7 @@
 #include "pdfmaker/page.hpp"
 #include "pdfmaker/style.hpp"
 
-#include <string_view>
+#include <string>
 #include <filesystem>
 
 namespace pdfmaker {
@@ -21,19 +21,19 @@ public:
     Document(const Document&) = delete;
     Document& operator=(const Document&) = delete;
 
-    void set_title(std::string_view title);
-    void set_author(std::string_view author);
-    void set_subject(std::string_view subject);
+    void set_title(const std::string& title);
+    void set_author(const std::string& author);
+    void set_subject(const std::string& subject);
 
-    Font get_font(std::string_view name, std::string_view encoding = "");
+    Font get_font(const std::string& name, const std::string& encoding = "");
     std::string load_ttf_font(const std::filesystem::path& path, bool embed = true);
 
-    FontFamily make_font_family(std::string_view regular,
-                                std::string_view bold = "",
-                                std::string_view italic = "",
-                                std::string_view bold_italic = "",
-                                std::string_view mono = "",
-                                std::string_view encoding = "");
+    FontFamily make_font_family(const std::string& regular,
+                                const std::string& bold = "",
+                                const std::string& italic = "",
+                                const std::string& bold_italic = "",
+                                const std::string& mono = "",
+                                const std::string& encoding = "");
 
     void use_utf8();
 

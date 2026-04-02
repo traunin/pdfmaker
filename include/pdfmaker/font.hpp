@@ -1,7 +1,7 @@
 #pragma once
 
 #include <hpdf.h>
-#include <string_view>
+#include <string>
 
 namespace pdfmaker {
 
@@ -12,7 +12,7 @@ public:
     Font() = default;
     explicit Font(HPDF_Font handle) : handle_(handle) {}
 
-    float text_width(std::string_view text, float size) const;
+    float text_width(const std::string& text, float size) const;
 
     int ascent() const;
     int descent() const;

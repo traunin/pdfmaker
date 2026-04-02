@@ -1,8 +1,6 @@
 #include "pdfmaker/document.hpp"
 #include "pdfmaker/error.hpp"
 
-#include <string>
-
 namespace pdfmaker {
 
 Document::Document() = default;
@@ -10,26 +8,21 @@ Document::~Document() = default;
 Document::Document(Document&&) noexcept = default;
 Document& Document::operator=(Document&&) noexcept = default;
 
-void Document::set_title(std::string_view title) {
-    std::string buf(title);
-    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_TITLE, buf.c_str());
+void Document::set_title(const std::string& title) {
+    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_TITLE, title.c_str());
 }
 
-void Document::set_author(std::string_view author) {
-    std::string buf(author);
-    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_AUTHOR, buf.c_str());
+void Document::set_author(const std::string& author) {
+    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_AUTHOR, author.c_str());
 }
 
-void Document::set_subject(std::string_view subject) {
-    std::string buf(subject);
-    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_SUBJECT, buf.c_str());
+void Document::set_subject(const std::string& subject) {
+    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_SUBJECT, subject.c_str());
 }
 
-Font Document::get_font(std::string_view name, std::string_view encoding) {
-    std::string name_buf(name);
-    std::string enc_buf(encoding);
-    const char* enc_ptr = enc_buf.empty() ? nullptr : enc_buf.c_str();
-    HPDF_Font font = HPDF_GetFont(guard_.get(), name_buf.c_str(), enc_ptr);
+Font Document::get_font(const std::string& name, const std::string& encoding) {
+    const char* enc_ptr = encoding.empty() ? nullptr : encoding.c_str();
+    HPDF_Font font = HPDF_GetFont(guard_.get(), name.c_str(), enc_ptr);
     return Font(font);
 }
 
@@ -40,12 +33,12 @@ std::string Document::load_ttf_font(const std::filesystem::path& path, bool embe
     return std::string(font_name);
 }
 
-FontFamily Document::make_font_family(std::string_view regular,
-                                      std::string_view bold,
-                                      std::string_view italic,
-                                      std::string_view bold_italic,
-                                      std::string_view mono,
-                                      std::string_view encoding) {
+FontFamily Document::make_font_family(const std::string& regular,
+                                      const std::string& bold,
+                                      const std::string& italic,
+                                      const std::string& bold_italic,
+                                      const std::string& mono,
+                                      const std::string& encoding) {
     FontFamily family;
     family.regular = get_font(regular, encoding);
     family.bold = bold.empty() ? family.regular : get_font(bold, encoding);

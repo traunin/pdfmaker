@@ -1,7 +1,6 @@
 #include "pdfmaker/page.hpp"
 
-#include <iostream>
-#include <string>
+#include <utility>
 
 namespace pdfmaker {
 
@@ -9,13 +8,12 @@ TextScope::TextScope(HPDF_Page page) : page_(page) {
     HPDF_Page_BeginText(page_);
 }
 
+TextScope::TextScope(TextScope&& other) noexcept
+    : page_(std::exchange(other.page_, nullptr)) {}
+
 TextScope::~TextScope() {
-    try {
+    if (page_) {
         HPDF_Page_EndText(page_);
-    } catch (const std::exception& e) {
-        std::cerr << "pdfmaker: EndText failed: " << e.what() << '\n';
-    } catch (...) {
-        std::cerr << "pdfmaker: EndText failed with unknown error\n";
     }
 }
 
@@ -39,18 +37,16 @@ void Page::set_font(Font font, float size) {
     HPDF_Page_SetFontAndSize(handle_, font.raw(), size);
 }
 
-void Page::text_out(float x, float y, std::string_view text) {
-    std::string buf(text);
-    HPDF_Page_TextOut(handle_, x, y, buf.c_str());
+void Page::text_out(float x, float y, const std::string& text) {
+    HPDF_Page_TextOut(handle_, x, y, text.c_str());
 }
 
 void Page::move_text_pos(float x, float y) {
     HPDF_Page_MoveTextPos(handle_, x, y);
 }
 
-void Page::show_text(std::string_view text) {
-    std::string buf(text);
-    HPDF_Page_ShowText(handle_, buf.c_str());
+void Page::show_text(const std::string& text) {
+    HPDF_Page_ShowText(handle_, text.c_str());
 }
 
 void Page::set_line_width(float width) {
