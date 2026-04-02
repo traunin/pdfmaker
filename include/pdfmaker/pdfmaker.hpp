@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pdfmaker/error.hpp"
 #include "pdfmaker/color.hpp"
 #include "pdfmaker/font.hpp"
 #include "pdfmaker/style.hpp"
