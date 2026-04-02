@@ -76,6 +76,10 @@ Page Document::add_page(const PageStyle& style) {
     return page;
 }
 
+int Document::page_count() const {
+    return page_count_;
+}
+
 void Document::save(const std::filesystem::path& path) const {
     std::string path_str = path.string();
     HPDF_SaveToFile(guard_.get(), path_str.c_str());
