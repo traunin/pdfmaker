@@ -5,6 +5,7 @@ add_library(pdfmaker
     font.cpp
     style.cpp
     page.cpp
+    document.cpp
 )
 
 target_include_directories(pdfmaker

@@ -23,7 +23,7 @@ private:
 class Page {
 public:
     Page() = default;
-    explicit Page(HPDF_PageSizes size, HPDF_PageDirection direction);
+    explicit Page(HPDF_Page handle) : handle_(handle) {}
 
     float width() const;
     float height() const;
@@ -51,11 +51,11 @@ public:
 
     void set_text_leading(float leading);
 
-    HPDF_Page raw() const noexcept { return page_; }
-    explicit operator bool() const noexcept { return page_ != nullptr; }
+    HPDF_Page raw() const noexcept { return handle_; }
+    explicit operator bool() const noexcept { return handle_ != nullptr; }
 
 private:
-    HPDF_Page page_ = nullptr;
+    HPDF_Page handle_ = nullptr;
 };
 
 } // namespace pdfmaker
