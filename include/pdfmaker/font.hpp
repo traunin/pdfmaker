@@ -5,6 +5,8 @@
 
 namespace pdfmaker {
 
+// non-owning handle to a font loaded by a Document
+// must not outlive the parent Document
 class Font {
 public:
     Font() = default;

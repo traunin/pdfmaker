@@ -20,6 +20,8 @@ private:
     HPDF_Page page_;
 };
 
+// non-owning handle to a page in a Document
+// must not outlive the parent Document
 class Page {
 public:
     Page() = default;
