@@ -29,10 +29,10 @@ public:
     std::string load_ttf_font(const std::filesystem::path& path, bool embed = true);
 
     FontFamily make_font_family(std::string_view regular,
-                                std::string_view bold,
-                                std::string_view italic,
-                                std::string_view bold_italic,
-                                std::string_view mono,
+                                std::string_view bold = "",
+                                std::string_view italic = "",
+                                std::string_view bold_italic = "",
+                                std::string_view mono = "",
                                 std::string_view encoding = "");
 
     void use_utf8();

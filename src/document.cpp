@@ -48,10 +48,10 @@ FontFamily Document::make_font_family(std::string_view regular,
                                       std::string_view encoding) {
     FontFamily family;
     family.regular = get_font(regular, encoding);
-    family.bold = get_font(bold, encoding);
-    family.italic = get_font(italic, encoding);
-    family.bold_italic = get_font(bold_italic, encoding);
-    family.mono = get_font(mono, encoding);
+    family.bold = bold.empty() ? family.regular : get_font(bold, encoding);
+    family.italic = italic.empty() ? family.regular : get_font(italic, encoding);
+    family.bold_italic = bold_italic.empty() ? family.regular : get_font(bold_italic, encoding);
+    family.mono = mono.empty() ? family.regular : get_font(mono, encoding);
     return family;
 }
 
