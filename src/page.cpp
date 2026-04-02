@@ -1,5 +1,6 @@
 #include "pdfmaker/page.hpp"
 
+#include <iostream>
 #include <string>
 
 namespace pdfmaker {
@@ -9,7 +10,13 @@ TextScope::TextScope(HPDF_Page page) : page_(page) {
 }
 
 TextScope::~TextScope() {
-    HPDF_Page_EndText(page_);
+    try {
+        HPDF_Page_EndText(page_);
+    } catch (const std::exception& e) {
+        std::cerr << "pdfmaker: EndText failed: " << e.what() << '\n';
+    } catch (...) {
+        std::cerr << "pdfmaker: EndText failed with unknown error\n";
+    }
 }
 
 float Page::width() const {
