@@ -20,8 +20,4 @@ private:
     static std::string format_message(HPDF_STATUS code, HPDF_STATUS detail);
 };
 
-namespace detail {
-void check_status(HPDF_STATUS status);
-} // namespace detail
-
 } // namespace pdfmaker
