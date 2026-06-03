@@ -12,6 +12,8 @@ add_library(pdfmaker
     layout/image_block.cpp
     layout/list_block.cpp
     layout/code_block.cpp
+    layout/page_break.cpp
+    layout/toc_block.cpp
 )
 
 target_include_directories(pdfmaker
