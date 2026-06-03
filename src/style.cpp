@@ -3,9 +3,7 @@
 namespace pdfmaker {
 
 Font TextStyle::resolved_font() const {
-    if (!font_family) {
-        return {};
-    }
+    if (!font_family) return {};
     return font_family->resolve(bold, italic, mono);
 }
 
