@@ -1,15 +1,12 @@
 #include "pdfmaker/page.hpp"
 
-#include <utility>
+#include <string>
 
 namespace pdfmaker {
 
 TextScope::TextScope(HPDF_Page page) : page_(page) {
     HPDF_Page_BeginText(page_);
 }
-
-TextScope::TextScope(TextScope&& other) noexcept
-    : page_(std::exchange(other.page_, nullptr)) {}
 
 TextScope::~TextScope() {
     if (page_) {
@@ -90,8 +87,8 @@ void Page::fill_stroke() {
     HPDF_Page_FillStroke(handle_);
 }
 
-void Page::draw_image(HPDF_Image image, float x, float y, float w, float h) {
-    HPDF_Page_DrawImage(handle_, image, x, y, w, h);
+void Page::draw_image(HPDF_Image image, float x, float y, float width, float height) {
+    HPDF_Page_DrawImage(handle_, image, x, y, width, height);
 }
 
 void Page::set_text_leading(float leading) {
