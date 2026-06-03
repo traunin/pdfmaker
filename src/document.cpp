@@ -1,6 +1,8 @@
 #include "pdfmaker/document.hpp"
 #include "pdfmaker/error.hpp"
 
+#include <string>
+
 namespace pdfmaker {
 
 Document::Document() = default;
@@ -8,21 +10,30 @@ Document::~Document() = default;
 Document::Document(Document&&) noexcept = default;
 Document& Document::operator=(Document&&) noexcept = default;
 
-void Document::set_title(const std::string& title) {
-    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_TITLE, title.c_str());
+void Document::set_title(std::string_view title) {
+    std::string buf(title);
+    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_TITLE, buf.c_str());
+    guard_.check();
 }
 
-void Document::set_author(const std::string& author) {
-    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_AUTHOR, author.c_str());
+void Document::set_author(std::string_view author) {
+    std::string buf(author);
+    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_AUTHOR, buf.c_str());
+    guard_.check();
 }
 
-void Document::set_subject(const std::string& subject) {
-    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_SUBJECT, subject.c_str());
+void Document::set_subject(std::string_view subject) {
+    std::string buf(subject);
+    HPDF_SetInfoAttr(guard_.get(), HPDF_INFO_SUBJECT, buf.c_str());
+    guard_.check();
 }
 
-Font Document::get_font(const std::string& name, const std::string& encoding) {
-    const char* enc_ptr = encoding.empty() ? nullptr : encoding.c_str();
-    HPDF_Font font = HPDF_GetFont(guard_.get(), name.c_str(), enc_ptr);
+Font Document::get_font(std::string_view name, std::string_view encoding) {
+    std::string name_buf(name);
+    std::string enc_buf(encoding);
+    const char* enc_ptr = enc_buf.empty() ? nullptr : enc_buf.c_str();
+    HPDF_Font font = HPDF_GetFont(guard_.get(), name_buf.c_str(), enc_ptr);
+    guard_.check();
     return Font(font);
 }
 
@@ -30,15 +41,16 @@ std::string Document::load_ttf_font(const std::filesystem::path& path, bool embe
     std::string path_str = path.string();
     const char* font_name = HPDF_LoadTTFontFromFile(
         guard_.get(), path_str.c_str(), embed ? HPDF_TRUE : HPDF_FALSE);
-    return std::string(font_name);
+    guard_.check();
+    return std::string(font_name ? font_name : "");
 }
 
-FontFamily Document::make_font_family(const std::string& regular,
-                                      const std::string& bold,
-                                      const std::string& italic,
-                                      const std::string& bold_italic,
-                                      const std::string& mono,
-                                      const std::string& encoding) {
+FontFamily Document::make_font_family(std::string_view regular,
+                                       std::string_view bold,
+                                       std::string_view italic,
+                                       std::string_view bold_italic,
+                                       std::string_view mono,
+                                       std::string_view encoding) {
     FontFamily family;
     family.regular = get_font(regular, encoding);
     family.bold = bold.empty() ? family.regular : get_font(bold, encoding);
@@ -48,16 +60,18 @@ FontFamily Document::make_font_family(const std::string& regular,
     return family;
 }
 
-void Document::use_utf8() {
+void Document::use_utf8_encoding() {
     if (!utf8_enabled_) {
         HPDF_UseUTFEncodings(guard_.get());
+        guard_.check();
         utf8_enabled_ = true;
     }
 }
 
 Page Document::add_page() {
     HPDF_Page page = HPDF_AddPage(guard_.get());
-    page_count_++;
+    guard_.check();
+    ++page_count_;
     return Page(page);
 }
 
@@ -73,9 +87,28 @@ int Document::page_count() const {
     return page_count_;
 }
 
-void Document::save(const std::filesystem::path& path) const {
+Image Document::load_png(const std::filesystem::path& path) {
+    std::string path_str = path.string();
+    HPDF_Image img = HPDF_LoadPngImageFromFile(guard_.get(), path_str.c_str());
+    guard_.check();
+    return Image(img);
+}
+
+Image Document::load_jpeg(const std::filesystem::path& path) {
+    std::string path_str = path.string();
+    HPDF_Image img = HPDF_LoadJpegImageFromFile(guard_.get(), path_str.c_str());
+    guard_.check();
+    return Image(img);
+}
+
+void Document::save(const std::filesystem::path& path) {
     std::string path_str = path.string();
     HPDF_SaveToFile(guard_.get(), path_str.c_str());
+    guard_.check();
+}
+
+void Document::check() const {
+    guard_.check();
 }
 
 HPDF_Doc Document::raw() const noexcept {
