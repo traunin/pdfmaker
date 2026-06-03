@@ -20,4 +20,12 @@ std::string PdfError::format_message(HPDF_STATUS code, HPDF_STATUS detail) {
     return oss.str();
 }
 
+namespace detail {
+void check_status(HPDF_STATUS status) {
+    if (status != HPDF_OK) {
+        throw PdfError(status, 0);
+    }
+}
+} // namespace detail
+
 } // namespace pdfmaker
