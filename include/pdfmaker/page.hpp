@@ -13,12 +13,8 @@ class TextScope {
 public:
     explicit TextScope(HPDF_Page page);
     ~TextScope();
-
     TextScope(const TextScope&) = delete;
     TextScope& operator=(const TextScope&) = delete;
-
-    TextScope(TextScope&&) noexcept;
-    TextScope& operator=(TextScope&&) = delete;
 
 private:
     HPDF_Page page_;
