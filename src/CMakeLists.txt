@@ -6,6 +6,8 @@ add_library(pdfmaker
     style.cpp
     page.cpp
     document.cpp
+    layout/text_block.cpp
+    layout/heading_block.cpp
 )
 
 target_include_directories(pdfmaker
