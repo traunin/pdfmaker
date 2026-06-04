@@ -16,6 +16,7 @@ add_library(pdfmaker
     layout/toc_block.cpp
     layout/header_footer.cpp
     layout/layout_engine.cpp
+    document_builder.cpp
 )
 
 target_include_directories(pdfmaker
