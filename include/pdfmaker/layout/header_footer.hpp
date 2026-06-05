@@ -26,10 +26,12 @@ class HeaderFooterRenderer {
 public:
     HeaderFooterRenderer(const PageStyle& page_style, Font font);
 
+    // first_page_number is the number shown on the first laid-out page
     void render(std::vector<Page>& pages,
                 const HeaderFooterSpec& header,
                 const HeaderFooterSpec& footer,
-                bool skip_first_page) const;
+                bool skip_first_page,
+                int first_page_number = 1) const;
 
 private:
     void render_spec(Page& page, const HeaderFooterSpec& spec, float y,
