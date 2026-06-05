@@ -44,9 +44,9 @@ std::vector<std::string> TocBlock::wrap_text(Font font, float size,
 float TocBlock::estimate_height(const LayoutContext& ctx) const {
     if (!ctx.toc_outline || ctx.toc_outline->empty()) return 0.0f;
 
-    float entry_h = entry_font_size_ * line_spacing_;
+    float entry_h = entry_font_size_ * line_spacing_ * LINE_HEIGHT_RATIO;
     // one line per entry is a lower bound; wrapping is resolved during layout.
-    float h = title_font_size_ * line_spacing_ + 8.0f;
+    float h = title_font_size_ * line_spacing_ * LINE_HEIGHT_RATIO + 8.0f;
     h += static_cast<float>(ctx.toc_outline->size()) * entry_h;
     return h;
 }
@@ -66,7 +66,7 @@ LayoutResult TocBlock::layout(LayoutContext& ctx) {
     if (!bold_font) bold_font = regular_font;
 
     // title (static text, drawn now)
-    float title_h = title_font_size_ * line_spacing_;
+    float title_h = title_font_size_ * line_spacing_ * LINE_HEIGHT_RATIO;
     if (ctx.cursor_y - title_h < ctx.page_bottom) {
         ctx.new_page();
         page_break = true;
@@ -88,7 +88,7 @@ LayoutResult TocBlock::layout(LayoutContext& ctx) {
     total_height += 8.0f;
 
     // reserve rows for every (possibly wrapped) entry
-    float entry_h = entry_font_size_ * line_spacing_;
+    float entry_h = entry_font_size_ * line_spacing_ * LINE_HEIGHT_RATIO;
     entries_.reserve(ctx.toc_outline->size());
 
     for (const TocOutlineItem& item : *ctx.toc_outline) {

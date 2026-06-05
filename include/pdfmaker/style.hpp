@@ -8,6 +8,9 @@
 
 namespace pdfmaker {
 
+// ratio of a font's natural single-line height to its point size
+constexpr float LINE_HEIGHT_RATIO = 1.15f;
+
 enum class TextAlignment {
     Left,
     Right,

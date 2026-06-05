@@ -38,7 +38,7 @@ std::vector<TextBlock::Line> TextBlock::break_into_lines(float max_width) const 
         Font font = run.style.resolved_font();
         if (!font) continue;
 
-        float line_h = run.style.font_size * para_style_.line_spacing;
+        float line_h = run.style.font_size * para_style_.line_spacing * LINE_HEIGHT_RATIO;
         float run_space_w = font.text_width(" ", run.style.font_size);
 
         // Split run text into words by spaces
