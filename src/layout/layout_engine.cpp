@@ -26,6 +26,10 @@ void LayoutEngine::set_skip_first_page_decorations(bool skip) {
     skip_first_page_decorations_ = skip;
 }
 
+void LayoutEngine::set_first_page_number(int n) {
+    first_page_number_ = n;
+}
+
 Page LayoutEngine::create_page(Document& doc) {
     Page page = doc.add_page(page_style_);
     pages_.push_back(page);
@@ -85,7 +89,8 @@ void LayoutEngine::render(Document& doc, std::vector<std::unique_ptr<ContentBloc
     // render headers and footers on all pages
     if (fonts_) {
         HeaderFooterRenderer renderer(page_style_, fonts_->regular);
-        renderer.render(pages_, header_, footer_, skip_first_page_decorations_);
+        renderer.render(pages_, header_, footer_, skip_first_page_decorations_,
+                        first_page_number_);
         doc.check();
     }
 }

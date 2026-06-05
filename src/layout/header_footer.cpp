@@ -55,7 +55,8 @@ void HeaderFooterRenderer::render_spec(Page& page, const HeaderFooterSpec& spec,
 void HeaderFooterRenderer::render(std::vector<Page>& pages,
                                   const HeaderFooterSpec& header,
                                   const HeaderFooterSpec& footer,
-                                  bool skip_first_page) const {
+                                  bool skip_first_page,
+                                  int first_page_number) const {
     if (!font_) return;
 
     int total_pages = static_cast<int>(pages.size());
@@ -64,7 +65,7 @@ void HeaderFooterRenderer::render(std::vector<Page>& pages,
         if (skip_first_page && i == 0) continue;
 
         Page& page = pages[i];
-        int page_num = i + 1;
+        int page_num = first_page_number + i;
         float page_h = page.height();
 
         float header_y = page_h - page_style_.margin_top / 2.0f;

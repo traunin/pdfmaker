@@ -82,6 +82,11 @@ DocumentBuilder& DocumentBuilder::skip_first_page_decorations(bool skip) {
     return *this;
 }
 
+DocumentBuilder& DocumentBuilder::first_page_number(int n) {
+    engine_.set_first_page_number(n);
+    return *this;
+}
+
 DocumentBuilder& DocumentBuilder::add_toc(const std::string& title_text) {
     blocks_.push_back(std::make_unique<TocBlock>(title_text));
     return *this;
@@ -90,6 +95,17 @@ DocumentBuilder& DocumentBuilder::add_toc(const std::string& title_text) {
 DocumentBuilder& DocumentBuilder::add_heading(int level, const std::string& text) {
     ensure_fonts();
     blocks_.push_back(std::make_unique<HeadingBlock>(level, text, get_heading_style(level)));
+    return *this;
+}
+
+DocumentBuilder& DocumentBuilder::add_heading(int level, const std::string& text,
+                                              ParagraphStyle style) {
+    ensure_fonts();
+    // supply the loaded font family when the caller's style does not carry one.
+    if (!style.text.font_family) {
+        style.text.font_family = &fonts_;
+    }
+    blocks_.push_back(std::make_unique<HeadingBlock>(level, text, std::move(style)));
     return *this;
 }
 
@@ -163,7 +179,13 @@ void DocumentBuilder::build(const std::filesystem::path& output_path) {
 
 ParagraphStyle DocumentBuilder::get_body_style() const {
     if (body_style_set_) {
-        return body_style_;
+        // a caller may set size/spacing without knowing the loaded fonts; supply
+        // the builder's font family when the style does not carry one.
+        ParagraphStyle style = body_style_;
+        if (!style.text.font_family) {
+            style.text.font_family = &fonts_;
+        }
+        return style;
     }
     // defaults
     ParagraphStyle style;

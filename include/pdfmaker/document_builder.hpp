@@ -50,10 +50,13 @@ public:
     DocumentBuilder& footer(const std::string& left, const std::string& center, const std::string& right);
     // suppress header/footer on the first page (e.g. a GOST title page).
     DocumentBuilder& skip_first_page_decorations(bool skip = true);
+    // number shown on the first laid-out page (use 2 when a separate title page)
+    DocumentBuilder& first_page_number(int n);
 
     // content blocks
     DocumentBuilder& add_toc(const std::string& title = "Contents");
     DocumentBuilder& add_heading(int level, const std::string& text);
+    DocumentBuilder& add_heading(int level, const std::string& text, ParagraphStyle style);
     DocumentBuilder& add_paragraph(const std::string& text);
     DocumentBuilder& add_paragraph(const std::string& text, ParagraphStyle style);
     DocumentBuilder& add_code(const std::string& code, float font_size = 12.0f);

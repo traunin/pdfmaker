@@ -18,6 +18,7 @@ public:
     void set_header(const std::string& left, const std::string& center, const std::string& right);
     void set_footer(const std::string& left, const std::string& center, const std::string& right);
     void set_skip_first_page_decorations(bool skip);
+    void set_first_page_number(int n);
 
     void render(Document& doc, std::vector<std::unique_ptr<ContentBlock>>& blocks);
 
@@ -29,6 +30,7 @@ private:
     HeaderFooterSpec header_;
     HeaderFooterSpec footer_;
     bool skip_first_page_decorations_ = false;
+    int first_page_number_ = 1;
     TocCollector toc_;
 
     std::vector<Page> pages_;
